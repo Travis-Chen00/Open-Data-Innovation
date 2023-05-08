@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Geocode from "react-geocode";
 import './map.scss'
 import axios from 'axios';
+import { MarkerClusterer } from '@react-google-maps/api';
 
 const containerStyle = {
     width: '900px',
@@ -22,7 +23,7 @@ const ServiceMap = () => {
     useEffect(() => {
         const fetchData = async () => {
             const response = await axios.get('/london.json');
-            const properties = response.data.slice(0, 20);
+            const properties = response.data.slice(0, 2000);
             const postalCodes = properties.map(property => property.Postal_Code);
             // console.log("PostalCodes:", postalCodes);
             const promises = postalCodes.map(postcode =>
@@ -36,15 +37,6 @@ const ServiceMap = () => {
         };
 
         Geocode.setApiKey("AIzaSyCkT6rPwlprpK8qnwG4SMnnloCsp7NcJkk");
-        // Geocode.fromAddress(postcode).then(
-        //     response => {
-        //         const { lat, lng } = response.results[0].geometry.location;
-        //         setLocation({ lat, lng });
-        //     },
-        //     error => {
-        //         console.error(error);
-        //     }
-        // );
         fetchData();
     }, []);
 
@@ -53,11 +45,15 @@ const ServiceMap = () => {
             <GoogleMap
                 mapContainerStyle={containerStyle}
                 center={londonCenter}
-                zoom={12}
+                zoom={10}
             >
-                {locations.map((location, index) => (
-                    <Marker key={index} position={location} />
-                ))}
+                 <MarkerClusterer>
+                 {clusterer =>
+                    locations.map((location, index) => (
+                        <Marker key={index} position={location} clusterer={clusterer} />
+                    ))
+                }
+                 </MarkerClusterer>
             </GoogleMap>
         );
     }
