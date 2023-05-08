@@ -40,9 +40,14 @@ const ServiceMap = () => {
         fetchData();
     }, []);
 
+    const handleClick = (clusterer, locations, index) =>{
+        console.log(locations[index].lat);
+    }
+
     const renderMap = () => {
         return (
-            <GoogleMap
+            <div className='map'>
+                <div className='google'><GoogleMap
                 mapContainerStyle={containerStyle}
                 center={londonCenter}
                 zoom={10}
@@ -50,11 +55,16 @@ const ServiceMap = () => {
                  <MarkerClusterer>
                  {clusterer =>
                     locations.map((location, index) => (
-                        <Marker key={index} position={location} clusterer={clusterer} />
+                        <Marker key={index} position={location} clusterer={clusterer} onClick={() => handleClick(clusterer, locations, index)}/>
                     ))
                 }
                  </MarkerClusterer>
             </GoogleMap>
+            </div>
+            <div className='others'>
+                Tools
+            </div>
+            </div>
         );
     }
 

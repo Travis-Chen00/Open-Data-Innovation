@@ -1,7 +1,8 @@
 .map{
     display: flex;
     justify-content: center;
-
+    flex-direction: column;
+    align-items: center;
     menu {
         flex: 2;
         display: flex;
