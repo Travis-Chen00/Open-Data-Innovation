@@ -6,11 +6,11 @@ import './map.scss'
 import axios from 'axios';
 import { MarkerClusterer } from '@react-google-maps/api';
 import 'antd/dist/antd.min.css'
-import { TreeSelect } from 'antd';
+import { TreeSelect, Button, Card, Table, Space} from 'antd';
 
 
 const { SHOW_PARENT } = TreeSelect;
-
+const { Column} = Table;
 const treeData = [
     {
         title: 'Type',
@@ -59,6 +59,11 @@ const treeData = [
                 value: '0-1-3',
                 key: '0-1-3',
             },
+            {
+                title: '>3',
+                value: '0-1-4',
+                key: '0-1-4',
+            },
         ],
     },
     {
@@ -80,6 +85,11 @@ const treeData = [
                 title: '3',
                 value: '0-2-2',
                 key: '0-2-2',
+            },
+            {
+                title: '>3',
+                value: '0-2-3',
+                key: '0-2-3',
             },
         ],
     },
@@ -128,45 +138,45 @@ const treeData = [
             },
         ],
     },
-    {
-        title: 'No. of Bathrooms',
-        value: '0-5',
-        key: '0-5',
-        children: [
-            {
-                title: '1',
-                value: '0-5-0',
-                key: '0-5-0',
-            },
-            {
-                title: '2',
-                value: '0-5-1',
-                key: '0-5-1',
-            },
-            {
-                title: '3',
-                value: '0-5-2',
-                key: '0-5-2',
-            },
-        ],
-    },
+    // {
+    //     title: 'No. of Bathrooms',
+    //     value: '0-5',
+    //     key: '0-5',
+    //     children: [
+    //         {
+    //             title: '1',
+    //             value: '0-5-0',
+    //             key: '0-5-0',
+    //         },
+    //         {
+    //             title: '2',
+    //             value: '0-5-1',
+    //             key: '0-5-1',
+    //         },
+    //         {
+    //             title: '3',
+    //             value: '0-5-2',
+    //             key: '0-5-2',
+    //         },
+    //     ],
+    // },
     {
         title: 'Prices',
         value: '0-6',
         key: '0-6',
         children: [
             {
-                title: '1-1000',
+                title: '<20000',
                 value: '0-6-0',
                 key: '0-6-0',
             },
             {
-                title: '2-1000',
+                title: '20000-60000',
                 value: '0-6-1',
                 key: '0-6-1',
             },
             {
-                title: '3-1000',
+                title: '>60000',
                 value: '0-6-2',
                 key: '0-6-2',
             },
@@ -193,7 +203,6 @@ const ServiceMap = () => {
     const [value, setValue] = useState(['0-0-0']);
 
     const onChange = (newValue) => {
-        console.log('onChange ', value);
         setValue(newValue);
     };
 
@@ -205,9 +214,11 @@ const ServiceMap = () => {
         showCheckedStrategy: SHOW_PARENT,
         placeholder: 'Please select',
         style: {
-            width: '100%',
+            width: '88%',
         },
     };
+
+    const [property, setProperty] = useState()
 
     // --------------------------------筛选------------------------------------------
 
@@ -223,6 +234,7 @@ const ServiceMap = () => {
                     error => console.error(error)
                 )
             );
+            setProperty(properties)
             const locations = await Promise.all(promises);
             setLocations(locations);
         };
@@ -231,10 +243,51 @@ const ServiceMap = () => {
         fetchData();
     }, []);
 
+    // console.log(property);
+
     const handleClick = (clusterer, locations, index) => {
         console.log(locations[index].lat);
     }
+    const [search, setSearch] = useState({
+        House_Type: "",
+        No_of_Bedrooms: "",
+        No_of_Bathrooms: "",
+        No_of_Receptions: "",
+        City: "",
+        Price: ""
+    })
 
+    const [result, setResult] = useState([])
+
+    const [disTable, setTable] = useState(null)
+
+    const handleSearch = () =>{
+        setTable(true)
+        switch (value[0])
+        {
+        case '0-0-0':
+                setSearch((prev) => ({ ...prev, House_Type: "House" }))
+            break;
+        case '0-0-1':
+                setSearch((prev) => ({ ...prev, House_Type: "Flat / Apartment" }))
+            break;
+        case '0-0-2':
+                setSearch((prev) => ({ ...prev, House_Type: "New development" }))
+            break;
+        case '0-0-3':
+                setSearch((prev) => ({ ...prev, House_Type: "Duplex" }))
+            break;
+        default:
+            break;
+        }
+        for(let tmp of property){
+            if(search.House_Type === tmp.House_Type){
+                setResult(
+                    prev => ([ ...prev, tmp ])
+                )
+            }
+        }
+    }
 
     const renderMap = () => {
         return (
@@ -250,11 +303,35 @@ const ServiceMap = () => {
                                 <Marker key={index} position={location} clusterer={clusterer} onClick={() => handleClick(clusterer, locations, index)} />
                             ))
                         }
-                    </MarkerClusterer>
+                    </MarkerClusterer>[]
                 </GoogleMap>
                 </div>
                 <div className='others'>
-                    Tools
+          <Card className='r-card'>
+        <Table dataSource={result} visible={disTable}>
+      <Column       
+      title='Property_Name' 
+      dataIndex='Property_Name'/>
+      <Column       title='Price'
+      dataIndex='Price'></Column>
+            <Column             title='House_Type'
+      dataIndex='House_Type'></Column>
+                  <Column             title='Area_in_sq_ft'
+      dataIndex='Area_in_sq_ft'></Column>
+                        <Column             title='No_of_Bedrooms'
+      dataIndex='No_of_Bedrooms'></Column>
+                        <Column             title='No_of_Bathrooms'
+      dataIndex='No_of_Bathrooms'></Column>
+                        <Column             title='No_of_Receptions'
+      dataIndex='No_of_Receptions'></Column>
+                        <Column             title='Location'
+      dataIndex='Location'></Column>
+                        <Column             title='City'
+      dataIndex='City'></Column>
+                              <Column             title='Postal_Code'
+      dataIndex='Postal_Code'></Column>
+      </Table>
+            </Card>
                 </div>
             </div>
         );
@@ -262,7 +339,10 @@ const ServiceMap = () => {
 
     return (
         <div>
+            <div className='tool'>
             <TreeSelect {...tProps} />
+            <Button style={{margin:"10px"}} onClick={handleSearch}>Search</Button>
+            </div>
             <div className='map'>
                 <LoadScript
                     googleMapsApiKey="AIzaSyCkT6rPwlprpK8qnwG4SMnnloCsp7NcJkk"
