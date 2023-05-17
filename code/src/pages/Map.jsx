@@ -113,6 +113,11 @@ const treeData = [
                 value: '0-3-2',
                 key: '0-3-2',
             },
+            {
+                title: '>3',
+                value: '0-3-3',
+                key: '0-3-3',
+            },
         ],
     },
     {
@@ -320,6 +325,9 @@ const ServiceMap = () => {
         case '0-3-2':
                 setSearch((prev) => ({ ...prev, No_of_Receptions: 3 }))
             break;
+            case '0-3-3':
+                setSearch((prev) => ({ ...prev, No_of_Receptions: 4 }))
+            break;
         default:
             break;
         }
@@ -356,7 +364,7 @@ const ServiceMap = () => {
             if(search.House_Type === tmp.House_Type){
                 if(search.No_of_Bedrooms != '' && ((search.No_of_Bedrooms <= 3 && search.No_of_Bedrooms == tmp.No_of_Bedrooms) || (search.No_of_Bedrooms > 3 && search.No_of_Bedrooms <= tmp.No_of_Bedrooms))){
                     if(search.No_of_Bathrooms != '' && ((search.No_of_Bathrooms <= 3 && search.No_of_Bathrooms == tmp.No_of_Bathrooms) || (search.No_of_Bathrooms > 3 && search.No_of_Bathrooms <= tmp.No_of_Bathrooms))){
-                        if(search.No_of_Receptions  != '' && ((search.No_of_Receptions <= 3 && search.No_of_Receptions == tmp.No_of_Receptions) || (search.No_of_Receptions > 3 && search.No_of_Receptions <= tmp.No_of_Receptions))){
+                        if(search.No_of_Receptions  != '' && ((search.No_of_Receptions <= 3 && search.No_of_Receptions == tmp.No_of_Receptions) || (search.No_of_Receptions == 4 && search.No_of_Receptions <= tmp.No_of_Receptions))){
                             if(search.City != '' &&search.City === tmp.City){
                                 if(search.Price != '' && (search.Price === 1 && tmp.Price < 200000) || (search.Price === 2 && tmp.Price >= 200000 && tmp.Price < 600000) || (search.Price === 3 && tmp.Price >= 600000)){
                                     setResult(
