@@ -6,7 +6,7 @@ export default function Footer() {
     <footer>
     <img src={House} alt="" />
     <span>
-      ✔ <b>Right Move</b>.
+      ✔ <b>Right House</b>.
     </span>
   </footer>
   )

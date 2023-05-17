@@ -1,8 +1,8 @@
 import './App.scss';
 import Map from './pages/Map'
-import Predicate from './pages/Predicate'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
+import MyForm from './pages/MyForm';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/predicate",
-        element: <Predicate />,
+        element: <MyForm />,
       },
     ],
   },

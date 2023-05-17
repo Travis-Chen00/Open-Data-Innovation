@@ -1,0 +1,18 @@
+.predict{
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+
+    .output{
+        display: flex;
+        flex-direction: column;
+        .result{
+            background-color: 'gray'; // 设置背景色为灰色
+            padding: '70px';  // 设置内边距为10像素
+            border-radius: '5px';  // 设置边角半径为5像素
+            color: 'black';  // 设置文本颜色为白色
+            width: '250px';
+            font-size:'15px';
+        }
+    }
+}
