@@ -2,7 +2,7 @@
 __University of Southampton__
 COMP6214 Open Data Innovation<br>
 Coursework 2: Right House<br>
-Dependency: npm i react-router-dom sass @react-google-maps/api
+Dependency: react-router-dom sass @react-google-maps/api
 ## Introduction
 
 ## Motivation
